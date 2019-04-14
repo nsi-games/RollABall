@@ -3,53 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RollABall
+using TMPro;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
 {
-    public class GameManager : MonoBehaviour
+    #region Singleton
+    public static GameManager Instance = null;
+    private void Awake()
     {
-        #region Singleton
-        public static GameManager Instance = null;
-        private void Awake()
-        {
-            Instance = this;
-        }
-        private void OnDestroy()
-        {
-            Instance = null;
-        }
-        #endregion
-
-        public int score = 0;
-        public bool isGameRunning = true;
-        public Transform collectables;
-        [Header("UI")]
-        public Text scoreText;
-
-        void Update()
-        {
-            // If the game is not running
-            if (!isGameRunning)
-                return; // Exit Update
-
-            // Are all collectables gone?
-            if(collectables.childCount == 0)
-            {
-                // Game is no longer running
-                isGameRunning = false;
-                // Game Over
-                GameOver();
-            }
-        }
-
-        void GameOver()
-        {
-
-        }
-
-        public void AddScore(int scoreToAdd)
-        {
-            score += scoreToAdd;
-            scoreText.text = "Score: " + score.ToString();
-        }
+        Instance = this;
     }
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
+    #endregion
+
+    public int score = 0;
+    public TextMeshProUGUI scoreText;
+
+    public void GameOver()
+    {
+        print("Game is over!!");
+    }
+
+    public void AddScore(int scoreToAdd)
+    {
+        score += scoreToAdd;
+        scoreText.text = "Score: " + score.ToString();
+    }
+
+
+    #region Extras
+    public void NextLevel()
+    {
+        // Get current scene
+        Scene current = SceneManager.GetActiveScene();
+        // Load next scene
+        SceneManager.LoadScene(current.buildIndex + 1);
+    }
+    #endregion
 }
