@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-using TMPro;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -22,7 +19,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public int score = 0;
-    public TextMeshProUGUI scoreText;
+    public ItemManager itemManager;
 
     public void GameOver()
     {
@@ -32,11 +29,11 @@ public class GameManager : MonoBehaviour
     public void AddScore(int scoreToAdd)
     {
         score += scoreToAdd;
-        scoreText.text = "Score: " + score.ToString();
+
+        // ... Update Score Text
+        // ... Play a sound
     }
 
-
-    #region Extras
     public void NextLevel()
     {
         // Get current scene
@@ -44,5 +41,4 @@ public class GameManager : MonoBehaviour
         // Load next scene
         SceneManager.LoadScene(current.buildIndex + 1);
     }
-    #endregion
 }

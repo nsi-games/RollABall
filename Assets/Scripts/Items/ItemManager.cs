@@ -6,50 +6,61 @@ using UnityEngine.Events;
 
 public class ItemManager : MonoBehaviour
 {
-    public GameObject itemPrefab;
-    public UnityEvent onEmpty;
+    public UnityEvent onItemCollected, onEmpty;
 
     // Count of how many items have been spawned
-    private int itemCount = 0;
+    private List<Item> items = new List<Item>();
 
     // Use this for initialization
     void Start()
     {
-        SpawnItems();
+        // Populates the item list
+        PopulateItems();
     }
 
-    // Update is called once per frame
-    void SpawnItems()
+    void PopulateItems()
     {
-        // Get every point in children
-        Transform[] spawnPoints = GetComponentsInChildren<Transform>();
-        // Loop through all points (Except for first)
-        for (int i = 1; i < spawnPoints.Length; i++)
+        // Get all transforms attached to GameObject
+        Transform[] children = GetComponentsInChildren<Transform>();
+        // Loop over each child
+        foreach (var child in children)
         {
-            // Get spawn point
-            Transform point = spawnPoints[i];
-            // Spawn item at position
-            GameObject clone = Instantiate(itemPrefab, point.position, point.rotation, transform);
-            // Get item script
-            Item item = clone.GetComponent<Item>();
-            // Subscribe item collect to also check empty
-            item.onCollect.AddListener(ItemCollected);
-            // Spawn item on point
-            Destroy(point.gameObject);
-            // Count up item count
-            itemCount++;
+            // If a child is an item
+            Item item = child.GetComponent<Item>();
+            if (item)
+            {
+                // Tell item to call "ItemCollected" function when Player collects it
+                item.onCollect.AddListener(ItemCollected);
+                // Add the item to the list
+                items.Add(item);
+            }
         }
     }
 
-    void ItemCollected()
+    void ItemCollected(Item item)
     {
         // Count down items
-        itemCount--;
+        items.Remove(item);
+        // Item Collected 
+        onItemCollected.Invoke();
         // If there is no more items
-        if(itemCount <= 0)
+        if(items.Count <= 0)
         {
             // Run onEmpty event
             onEmpty.Invoke();
         }
+    }
+
+    public Item GetItem(int index)
+    {
+        // Check if index is out of range
+        if (index < 0 || index >= items.Count)
+        {
+            // Error, invalid index
+            return null;
+        }
+
+        // Return the selected index
+        return items[index];
     }
 }
