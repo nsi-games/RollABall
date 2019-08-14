@@ -123,5 +123,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncInterval: 0.1
-  explosionRadius: 2
+  explosionRadius: 10
   explosionDelay: 2
+  destroyDelay: 1
+  linePrefab: {fileID: 8476827886875246210, guid: 5d40be173c53f1f458c38570e1b6f7c6,
+    type: 3}

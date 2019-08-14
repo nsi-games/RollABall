@@ -8,17 +8,39 @@ public class Bomb : NetworkBehaviour
 {
     public float explosionRadius = 2f;
     public float explosionDelay = 2f;
+    public float destroyDelay = 1f;
+
+    public GameObject linePrefab;
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);    
     }
-    
+    void Start()
+    {
+        StartCoroutine(Explode());
+    }
+
     public IEnumerator Explode()
     {
         yield return new WaitForSeconds(explosionDelay);
 
+        Explode(transform.position, explosionRadius);
         CmdExplode(transform.position, explosionRadius);
+
+        yield return new WaitForSeconds(destroyDelay);
+
+        NetworkServer.Destroy(gameObject);
+    }
+
+    void CreateLine(Vector3 start, Vector3 end)
+    {
+        GameObject clone = Instantiate(linePrefab, transform);
+        LineRenderer line = clone.GetComponent<LineRenderer>();
+        line.positionCount = 2;
+        line.SetPosition(0, start);
+        line.SetPosition(1, end);
     }
 
     [Command]
@@ -27,18 +49,26 @@ public class Bomb : NetworkBehaviour
         Collider[] hits = Physics.OverlapSphere(position, radius);
         foreach (var hit in hits)
         {
-            if (hit.GetComponent<NetworkIdentity>())
+            NetworkIdentity networkId = hit.GetComponent<NetworkIdentity>();
+            if (networkId && hit.name.Contains("Enemy"))
             {
                 NetworkServer.Destroy(hit.gameObject);
             }
         }
-
-        NetworkServer.Destroy(gameObject);
     }
 
-    void Start()
+    void Explode(Vector3 position, float radius)
     {
-        StartCoroutine(Explode());
+        Collider[] hits = Physics.OverlapSphere(position, radius);
+        foreach (var hit in hits)
+        {
+            NetworkIdentity networkId = hit.GetComponent<NetworkIdentity>();
+            if (networkId && hit.name.Contains("Enemy"))
+            {
+                CreateLine(transform.position, hit.transform.position);
+            }
+        }
     }
 
+    
 }

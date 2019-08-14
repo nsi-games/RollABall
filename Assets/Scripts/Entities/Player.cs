@@ -58,6 +58,7 @@ public class Player : NetworkBehaviour
         if (item)
         {
             item.Collect();
+            NetworkServer.Destroy(item.gameObject);
         }
     }
     private void Update()
