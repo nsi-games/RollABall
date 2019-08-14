@@ -11,10 +11,19 @@ public class ItemSpawner : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        Transform[] points = spawnPointParent.GetComponentsInChildren<Transform>();
-        for (int i = 1; i < points.Length; i++)
+        // Collect all Transform within SpawnPoint parent
+        Transform[] spawnPoints = spawnPointParent.GetComponentsInChildren<Transform>();
+
+        // Spawn an item on each point's position
+        for (int i = 1; i < spawnPoints.Length; i++)
         {
-            SpawnItem(points[i].position);
+            SpawnItem(spawnPoints[i].position);
+        }
+
+        // Destroy all spawn points
+        for (int i = 1; i < spawnPoints.Length; i++)
+        {
+            Destroy(spawnPoints[i].gameObject);
         }
     }
 

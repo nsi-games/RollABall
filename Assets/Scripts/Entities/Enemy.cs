@@ -26,9 +26,4 @@ public class Enemy : NetworkBehaviour
     {
         agent.SetDestination(target.position);
     }
-
-    public override void OnStartServer()
-    {
-        NetworkServer.Spawn(gameObject);
-    }
 }

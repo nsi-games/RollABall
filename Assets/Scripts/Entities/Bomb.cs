@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.Events;
+
 using Mirror;
 
 public class Bomb : NetworkBehaviour
@@ -12,10 +14,16 @@ public class Bomb : NetworkBehaviour
 
     public GameObject linePrefab;
 
+    private Animation anim;
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);    
+    }
+    void Awake()
+    {
+        anim = GetComponent<Animation>();
     }
     void Start()
     {
@@ -28,6 +36,8 @@ public class Bomb : NetworkBehaviour
 
         Explode(transform.position, explosionRadius);
         CmdExplode(transform.position, explosionRadius);
+
+        anim.Play("Shrink");
 
         yield return new WaitForSeconds(destroyDelay);
 
