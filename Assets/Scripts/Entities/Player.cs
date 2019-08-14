@@ -6,6 +6,11 @@ using Mirror;
 
 public class Player : NetworkBehaviour
 {
+    public GameObject bombPrefab;
+
+    public Camera attachedCamera;
+    public Transform attachedVirtualCamera;
+
     public float speed = 10f, jump = 10f;
     public LayerMask ignoreLayers;
     public float rayDistance = 10f;
@@ -17,9 +22,30 @@ public class Player : NetworkBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * rayDistance);
     }
+
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
+
+        // [Alternate]
+        // attachedCamera.enabled = isLocalPlayer;
+
+        attachedCamera.transform.SetParent(null);
+        attachedVirtualCamera.SetParent(null);
+
+        if (isLocalPlayer)
+        {
+            attachedCamera.enabled = true;
+            //attachedCamera.rect = new Rect(0f, 0f, 0.5f, 1.0f);
+            attachedVirtualCamera.gameObject.SetActive(true);
+        }
+        else
+        {
+            attachedCamera.enabled = false;
+            //attachedCamera.rect = new Rect(0.5f, 0f, 0.5f, 1.0f);
+            attachedVirtualCamera.gameObject.SetActive(false);
+        }
+
     }
     private void FixedUpdate()
     {
@@ -38,6 +64,12 @@ public class Player : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                // Spawn Bomb on Server
+                CmdSpawnBomb(transform.position);
+            }
+
             float inputH = Input.GetAxis("Horizontal");
             float inputV = Input.GetAxis("Vertical");
             Move(inputH, inputV);
@@ -46,6 +78,14 @@ public class Player : NetworkBehaviour
                 Jump();
             }
         }
+    }
+    #endregion
+    #region Commands
+    [Command]
+    public void CmdSpawnBomb(Vector3 position)
+    {
+        GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
+        NetworkServer.Spawn(bomb);
     }
     #endregion
     #region Custom
