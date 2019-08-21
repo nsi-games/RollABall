@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Shootable
   - Target
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -14,8 +16,11 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
+  - Lighting
+  - Ground
+  - Postprocessing
   - Player
+  - Enemy
   - Bomb
   - 
   - 
@@ -35,10 +40,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
   m_SortingLayers:
+  - name: Fire
+    uniqueID: 3804908061
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

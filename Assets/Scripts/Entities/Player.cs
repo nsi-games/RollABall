@@ -68,7 +68,7 @@ public class Player : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 // Spawn Bomb on Server
-                CmdSpawnBomb(rigid.position + rigid.velocity.normalized * Time.deltaTime, rigid.velocity);
+                CmdSpawnBomb(rigid.position, rigid.velocity);
             }
 
             float inputH = Input.GetAxis("Horizontal");
@@ -83,13 +83,18 @@ public class Player : NetworkBehaviour
     #endregion
     #region Commands
     [Command]
-    public void CmdSpawnBomb(Vector3 position, Vector3 velocity)
+    void CmdSpawnBomb(Vector3 position, Vector3 force)
     {
-        GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
-        Rigidbody bombRigid = bomb.GetComponent<Rigidbody>();
-        bombRigid.MovePosition(position);
-        bombRigid.velocity = velocity;
-        NetworkServer.Spawn(bomb);
+        RpcClientSpawnBomb(position, force);
+    }
+
+    [ClientRpc]
+    void RpcClientSpawnBomb(Vector3 position, Vector3 force)
+    {
+        GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity) as GameObject;
+        Rigidbody rigid = bomb.GetComponent<Rigidbody>();
+        rigid.velocity = force;
+        NetworkServer.SpawnWithClientAuthority(bomb, gameObject);
     }
     #endregion
     #region Custom

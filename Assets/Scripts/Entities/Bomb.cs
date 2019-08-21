@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using Mirror;
-
 public class Bomb : NetworkBehaviour
 {
     public float explosionRadius = 2f;
