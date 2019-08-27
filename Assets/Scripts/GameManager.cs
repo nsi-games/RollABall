@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public ItemManager itemManager;
 
+    public void OnGameStarted()
+    {
+
+    }
     public void GameOver()
     {
         print("Game is over!!");

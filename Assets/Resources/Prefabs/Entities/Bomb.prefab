@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 2767931584977159035}
   - component: {fileID: 2767931584977158980}
   - component: {fileID: 2767931584977158981}
+  - component: {fileID: 1196555272}
   - component: {fileID: 8082982063933938788}
   - component: {fileID: 1554440568}
   - component: {fileID: 233727070}
   - component: {fileID: 233727069}
   - component: {fileID: 670854439578292480}
-  - component: {fileID: 1196555272}
   m_Layer: 13
   m_Name: Bomb
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2767931584977158983}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.546223, z: -15.906844}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,6 +83,22 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!111 &1196555272
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2767931584977158983}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: fe0a8921264fe1640ae65c3644b6a612, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: fe0a8921264fe1640ae65c3644b6a612, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!135 &8082982063933938788
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -155,24 +171,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncInterval: 0.1
-  explosionRadius: 10
+  damage: 50
+  explosionRadius: 3
   explosionDelay: 2
   destroyDelay: 1
+  explosionPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
   linePrefab: {fileID: 8476827886875246210, guid: 5d40be173c53f1f458c38570e1b6f7c6,
     type: 3}
---- !u!111 &1196555272
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2767931584977158983}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: fe0a8921264fe1640ae65c3644b6a612, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: fe0a8921264fe1640ae65c3644b6a612, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 0
-  m_AnimatePhysics: 0
-  m_CullingType: 0

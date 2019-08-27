@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.Events;
 
 namespace Mirror
 {
@@ -37,7 +38,7 @@ namespace Mirror
         [Header("Network Info")]
         // transport layer
         [SerializeField] protected Transport transport;
-        [FormerlySerializedAs("m_NetworkAddress")] public string networkAddress = "localhost";
+        public string networkAddress { get; set; } = "localhost"; // Note (Manny): Changed this!
         [FormerlySerializedAs("m_MaxConnections")] public int maxConnections = 4;
 
         [Header("Spawn Info")]
@@ -49,6 +50,8 @@ namespace Mirror
         public List<GameObject> spawnPrefabs = new List<GameObject>();
 
         public static List<Transform> startPositions = new List<Transform>();
+
+        public UnityEvent onConnected;
 
         [NonSerialized]
         public bool clientLoadedScene;
@@ -677,7 +680,9 @@ namespace Mirror
         #endregion
 
         #region Server System Callbacks
-        public virtual void OnServerConnect(NetworkConnection conn) {}
+        public virtual void OnServerConnect(NetworkConnection conn) {
+            onConnected.Invoke();
+        }
 
         public virtual void OnServerDisconnect(NetworkConnection conn)
         {
